@@ -1,0 +1,91 @@
+<div id='container'>
+		<form action="/paypal/ec/createpayment" method="POST" id="ec_form">
+			<table>
+				<tr>
+					<td colspan="2" bgcolor="red"><span>TRANSACTION STATUS</span></td>
+				</tr>
+				<tr>
+					<td>INVOICE NUMBER:</td>
+					<td><input type="text" name="invoiceNumber" id="invoiceNumber" value=<%= Math.floor(Math.random() * 1000000) + 1; %>></td>
+				</tr>
+				<tr>
+					<td>ITEM CODE:</td>
+					<td><input type="text" name="itemCode" id="itemCode" value="666"></td>
+				</tr>
+				<tr>
+					<td>ITEM DESCRIPTIO<:</td>
+					<td><input type="text" name="itemDesc" id="itemDesc" value="Jaybird X3"></td>
+				</tr>
+				<tr>
+					<td>ITEM VALUE:</td>
+					<td><input type="text" name="itemValue" id="itemValue" value="300"></td>
+				</tr>
+				<tr>
+					<td>ITEM QUANTITY:</td>
+					<td><input type="text" name="itemQty" id="itemQty" value="1"></td>
+				</tr>
+				<tr>
+					<td>TOTAL AMOUNT:</td>
+					<td><input type="text" name="totalAmt" id="totalAmt" readonly="readonly" value="300"></td>
+				</tr>
+				<tr>
+					<td>RETURN URL:</td>
+					<td><input type="text" name="returnUrl" id="returnUrl" readonly="readonly" value="https://guilherme-integrationbr.c9users.io/getDetails.php"></td>
+				</tr>
+				<tr>
+					<td>CANCEL URL:</td>
+					<td><input type="text" name="cancelUrl" id="cancelUrl" readonly="readonly" value="http://localhost/failReturn.html"></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="submit" id="executeMethod" value="VAI!!!">
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan='2'>
+						<div id='paypal-button' />
+					</td>
+				</tr>
+			</table>
+		</form>
+</div>
+<script>
+
+    paypal.Button.render({
+        env: 'sandbox',
+        payment: () => {
+        	return paypal
+				.request
+				.post('/paypal/ec/createpayment', {data: $("#ec_form").serialize()})
+				.then((res) => {
+					return res.id;
+				});
+	    }, 
+        onAuthorize: (data, actions) => {
+        	console.log(data);
+        	return paypal
+        			.request
+        			.post('/paypal/ec/detailtransaction', data)
+        			.then((res) => {
+        				console.log(res);
+        			});
+        	return 
+        },
+        onCancel: () => {
+        	
+        },
+        onError: (data, actions) => {
+        	
+        },
+        style: {
+            size: 'large',
+            color: 'gold',
+            shape: 'pill'
+        },
+        commit: true
+    }, '#paypal-button');
+    
+</script>
+        
+

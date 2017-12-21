@@ -1,0 +1,11 @@
+{
+  "name": "node-js-test-store",
+  "version": "1.0.0",
+  "description": "NodeJS Test Store Application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Peluzzo, Guilherme",
+  "license": "ISC"
+}

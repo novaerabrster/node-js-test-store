@@ -1,0 +1,104 @@
+<div id='container'>
+    
+    <table>
+        <tr>
+            <td>
+                PAYMENT ID: 
+            </td>
+            <td>
+                <span name='id'><%= details.id %></span> 
+            </td>
+        </tr>
+        <tr>
+            <td colspan=2>
+                PAYER INFO
+            </td>
+        </tr>
+        <tr>
+            <td>
+                FIRST NAME: 
+            </td>
+            <td>
+                <span name='first_name'><%= details.payer_info.first_name %></span> 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                LAST NAME: 
+            </td>
+            <td>
+                <span name='last_name'><%= details.payer_info.last_name %> </span> 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                PAYER ID: 
+            </td>
+            <td>
+                <span name='payer_id'><%= details.payer_info.payer_id %> </span> 
+            </td>
+        </tr>
+        <tr>
+            <td colspan=2>
+                SHIPPING ADDRESS: 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                RECIPIENT NAME: 
+            </td>
+            <td>
+                <span name='shipping_address.recipient_name'><%= details.shipping_address.recipient_name %> </span> 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                ADDRESS LINE 1: 
+            </td>
+            <td>
+                <span name='shipping_address.line1'><%= details.shipping_address.line1 %> </span> 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                ADDRESS LINE 2: 
+            </td>
+            <td>
+                <span name='shipping_address.line2'><%= details.shipping_address.line2 %> </span> 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                CITY: 
+            </td>
+            <td>
+                <span name='shipping_address.city'><%= details.shipping_address.city %> </span> 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                STATE: 
+            </td>
+            <td>
+                <span name='shipping_address.state'><%= details.shipping_address.state %></span>  
+            </td>
+        </tr>
+        <tr>
+            <td>
+                POSTAL CODE: 
+            </td>
+            <td>
+                <span name='shipping_address.postal_code'><%= details.shipping_address.postal_code %></span>  
+            </td>
+        </tr>
+        <tr>
+            <td>
+                COUNTRY CODE: 
+            </td>
+            <td>
+                <span name='shipping_address.country_code'><%= details.shipping_address.country_code %> </span> 
+            </td>
+        </tr>
+    </table>
+    
+</div>
