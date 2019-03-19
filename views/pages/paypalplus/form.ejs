@@ -1,0 +1,132 @@
+<div id='content'>
+    <%= payload.links[1].href %>
+    <input type='hidden' id='createPaymentRequest' value='<%= JSON.stringify(createPaymentRequest) %>' />
+    <div id='paypalPlusPlaceholder'></div>
+    <div id='responseHolder'></div>
+    <br/><br/><br/><br/><br/>
+    <input type='submit' id='continuePPP' onclick='ppp.doContinue(); return false;' />
+</div>
+
+<script type="application/javascript">
+    
+    var ppp = PAYPAL.apps.PPP({
+        approvalUrl: '<%= payload.links[1].href %>'.replace(/&amp;/g, "&"),
+        placeholder: 'paypalPlusPlaceholder',
+        mode: "sandbox", 
+        payerFirstName: "Guilherme",
+        payerLastName: "Peluzzo",
+        payerEmail: "novaerabrster@gmail.com",
+        payerPhone: "11950002606",
+        payerTaxId: "35943886893",
+        payerTaxIdType: "BR_CPF",
+        language: "pt_BR",
+        country: "BR",
+        enableContinue : 'continuePPP',
+        rememberedCards: 'Mn7d_fC2FkrI0TCMt3-GnD3JnRBQCBxPTjU5WDKnk3rl-L8kvWAcaAfWrHKSjjSbcbfQvpK816oCbrBqsayuDtypJbz89nahW6S0wWdp-kNKazTd3uPanqcxIMiPOqIlRmkb9NH3Q4aZsRfY74YsEN_mPqXeUG3IYOTyfezqysvCHKiv',
+        collectBillingAddress: false
+    });
+    
+if (window.addEventListener) {
+    window.addEventListener("message", receiveMessage, false);
+    console.log("addEventListener successful", "debug");
+} else if (window.attachEvent) {
+    window.attachEvent("onmessage", receiveMessage);
+    console.log("attachEvent successful", "debug");
+} else {
+    console.log("Could not attach message listener", "debug");
+    throw new Error("Can't attach message listener");
+}
+
+function receiveMessage(event) {
+    try {
+        
+        console.log(event.data);
+        var message = JSON.parse(event.data);
+        
+        
+
+        if (typeof message['cause'] !== 'undefined') { //iFrame error handling
+            ppplusError = message['cause'].replace(/['"]+/g, ""); //log & attach this error into the orderif possible
+            // <<Insert Code Here>>
+            switch (ppplusError) {
+                case "INTERNAL_SERVICE_ERROR": //javascript fallthrough
+                case "SOCKET_HANG_UP": //javascript fallthrough
+                case "socket hang up": //javascript fallthrough
+                case "connect ECONNREFUSED": //javascript fallthrough
+                case "connect ETIMEDOUT": //javascript fallthrough
+                case "UNKNOWN_INTERNAL_ERROR": //javascript fallthrough
+                case "fiWalletLifecycle_unknown_error": //javascript fallthrough
+                case "Failed to decrypt term info": //javascript fallthrough
+                case "RESOURCE_NOT_FOUND": //javascript fallthrough
+                case "INTERNAL_SERVER_ERROR":
+                    alert("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                    //Generic error, inform the customer to try again; generate a new approval_url and reload the iFrame.
+                    // <<Insert Code Here>>
+                    break;
+                case "RISK_N_DECLINE": //javascript fallthrough
+                case "NO_VALID_FUNDING_SOURCE_OR_RISK_REFUSED": //javascript fallthrough
+                case "TRY_ANOTHER_CARD": //javascript fallthrough
+                case "NO_VALID_FUNDING_INSTRUMENT":
+                    alert("Seu pagamento não foi aprovado. Por favor utilize outro cartão, caso o problema persista entre em contato com o PayPal (0800-047-4482)."); //pt_BR
+                    //Risk denial, inform the customer to try again; generate a new approval_url and reload the iFrame.
+                    // <<Insert Code Here>>
+                    break;
+                case "CARD_ATTEMPT_INVALID":
+                    alert("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                    //03 maximum payment attempts with error, inform the customer to try again; generate a new approval_url and reload the iFrame.
+                    // <<Insert Code Here>>
+                    break;
+                case "INVALID_OR_EXPIRED_TOKEN":
+                    alert("A sua sessão expirou, por favor tente novamente."); //pt_BR
+                    //User session is expired, inform the customer to try again; generate a new approval_url and reload the iFrame.
+                    // <<Insert Code Here>>
+                    break;
+                case "CHECK_ENTRY":
+                    alert("Por favor revise os dados de Cartão de Crédito inseridos."); //pt_BR
+                    //Missing or invalid credit card information, inform your customer to check the inputs.
+                    // <<Insert Code Here>>
+                    break;
+                default: //unknown error & reload payment flow
+                    alert("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                    //Generic error, inform the customer to try again; generate a new approval_url and reload the iFrame.
+                    // <<Insert Code Here>>
+            }
+        }
+        if (message['action'] == 'checkout') { //PPPlus session approved, do logic here
+            console.log('BIRL!!' + event.data);
+            var rememberedCard = null;
+            var payerID = null;
+            var installmentsValue = null;
+            rememberedCard = message['result']['rememberedCards']; //save on user BD record
+            payerID = message['result']['payer']['payer_info']['payer_id']; //use it on executePayment API
+            if ("term" in message) {
+                installmentsValue = message['result']['term']['term']; //installments value
+            } else {
+                installmentsValue = 1; //no installments
+            }
+            let request = {
+                rememberedCard: rememberedCard,
+                installmentsValue: installmentsValue,
+                payerID: payerID,
+                paymentID: '<%= payload.id %>',
+                createPaymentRequest: $('#createPaymentRequest').val()
+            };
+            /* Next steps:
+            1) Save the rememberedCard value on the user record on your Database.
+            2) Save the installmentsValue value into the order (Optional).
+            3) Call executePayment API using payerID value to capture the payment.
+            */
+            $.post( "/paypal/plus/executePayment", request)
+            .done((data) => {
+                console.log(data);
+                //alert("DEU CERTO? "+ data.success ? 'COM CERTEZA' : 'CÊ É LOKO, PAI!')
+                $('#responseHolder').html(JSON.stringify(data.response));
+                
+            });
+            // <<Insert Code Here>>
+        }
+    } catch (e) { //treat exceptions here
+        // <<Insert Code Here>>
+    }
+}
+</script>

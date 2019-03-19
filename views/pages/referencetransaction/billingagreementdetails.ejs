@@ -1,0 +1,17 @@
+<form method='POST' action='/paypal/rt/calculatefinancingoptions'>
+    <table>
+        <tr>
+            <td>BILLING AGREEMENT ID: </td>
+            <td><input type='text' name='billingAgreementId' value='<%= response.billingAgreementId %>' /> </td>
+        </tr>
+        <tr>
+            <td>VALUE: </td>
+            <td><input type='text' name='amount' value='<%= response.amount %>'/></td>
+        </tr>
+        <tr>
+            <td colspan='2'>
+                <input type='submit' value='GERAR PARCELAS'/>
+            </td>
+        </tr>
+    </table>
+</form>

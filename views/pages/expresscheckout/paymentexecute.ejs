@@ -1,0 +1,22 @@
+<div id='container'>
+    
+    <span style='word-wrap: break-word;'>
+        
+        <%= JSON.stringify(response) %>
+        
+    </span>
+    
+    <% if(response.intent == 'authorize') { %>
+        
+        <form action='/paypal/ec/capturePayment' method='POST'>
+            
+            <input type='text' name='authorizationId' value='<%= response.transactions[0].related_resources[0].authorization.id %>' />
+            <input type='text' name='total' value='<%= response.transactions[0].amount.total %>' />
+            <input type='submit' value='CAPTURAR' />
+            
+        </form>
+        
+    <% } %>
+    
+</div> 
+

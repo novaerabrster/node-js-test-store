@@ -1,0 +1,124 @@
+<div id='container'>
+	<form action="/paypal/rt/setexpresscheckout" method="POST" id="ec_form">
+		<table>
+			<tr>
+				<td colspan="2" bgcolor="red"><span>DEFAULT FIELDS</span></td>
+			</tr>
+			<tr>
+				<td>USER:</td>
+				<td><input type="text" name="merchantUser" id="merchantUser" value="gpeluzzo-merch_api1.paypal.com"></td>
+			</tr>
+			<tr>
+				<td>PASS:</td>
+				<td><input type="text" name="merchantPass" id="merchantPass" value="ABMEAUBUYWCB3A2G"></td>
+			</tr>
+			<tr>
+				<td>SIGNATURE:</td>
+				<td><input type="text" name="merchantSignature" id="merchantSignature" value="AuO1vB7EOZLPTHEin2U0HXTQU6ZsAT7E43FO52lau-2LzqpykGHEdgFY"></td>
+			</tr>
+			<tr>
+				<td colspan="2" bgcolor="red"><span>METHOD</span></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<select id="method" name="method">
+						<option value="SetExpressCheckout">SetExpressCheckout</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" bgcolor="red"><span>TRANSACTION STATUS</span></td>
+			</tr>
+			<tr>
+				<td>INVOICE NUMBER:</td>
+				<td><input type="text" name="invoiceNumber" id="invoiceNumber" value=<%= Math.floor(Math.random() * 1000000) + 1; %>></td>
+			</tr>
+			<tr>
+				<td>ITEM CODE:</td>
+				<td><input type="text" name="itemCode" id="itemCode" value="666"></td>
+			</tr>
+			<tr>
+				<td>ITEM DESCRIPTION:</td>
+				<td><input type="text" name="itemDesc" id="itemDesc" value="Jaybird X3"></td>
+			</tr>
+			<tr>
+				<td>ITEM VALUE:</td>
+				<td><input type="text" name="itemValue" id="itemValue" value="0"></td>
+			</tr>
+			<tr>
+				<td>ITEM QUANTITY:</td>
+				<td><input type="text" name="itemQty" id="itemQty" value="0"></td>
+			</tr>
+			<tr>
+				<td>TOTAL AMOUNT:</td>
+				<td><input type="text" name="totalAmt" id="totalAmt" readonly="readonly" value="0"></td>
+			</tr>
+			<tr>
+				<td>RETURN URL:</td>
+				<td><input type="text" name="returnUrl" id="returnUrl" readonly="readonly" value="https://node-js-test-store-gpeluzzo.c9users.io/paypal/rt/"></td>
+			</tr>
+			<tr>
+				<td>CANCEL URL:</td>
+				<td><input type="text" name="cancelUrl" id="cancelUrl" readonly="readonly" value="https://node-js-test-store-gpeluzzo.c9users.io/paypal/rt/"></td>
+			</tr>
+			<tr>
+				<td colspan='2'>
+					<div id='paypal-button'/>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+
+<div id='ba-result'></div>
+
+<script>
+	 paypal.Button.render({
+	        env: 'sandbox',
+	        payment: () => {
+	        	return paypal
+					.request
+					.post('/paypal/rt/setexpresscheckout', {data: $("#ec_form").serialize()})
+					.then((res) => {
+						return res.TOKEN;
+					});
+		    }, 
+	        onAuthorize: (data, actions) => {
+	        	
+	        	let payload = {
+	        		
+	        		merchantUser: $('#merchantUser').val(),
+	        		merchantPass: $('#merchantPass').val(),
+	        		merchantSignature: $('#merchantSignature').val(),
+	        		amount: $('#totalAmt').val(),
+	        		token: data.paymentToken
+	        		
+	        	};
+	        
+	        	return paypal
+	        			.request
+	        			.post('/paypal/rt/createbillingagreement', payload)
+	        			.then((res) => {
+	        				console.log(res);
+	        				$('#ba-result').html(res);
+	        				$('#container').hide();
+	        				$('#ba-result').show();
+	        				
+
+	        			});
+	        },
+	        onCancel: () => {
+	        	
+	        },
+	        onError: (data, actions) => {
+	        	
+	        },
+	        locale: 'en_US',
+	        style: {
+	            size: 'medium',
+	            color: 'blue',
+	            shape: 'pill'
+	        },
+	        commit: true
+	    }, '#paypal-button');
+</script>

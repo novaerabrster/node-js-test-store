@@ -1,0 +1,40 @@
+<div id='container'>
+    <form action='/paypal/rt/createpayment' method='POST'>
+        <table>
+            <tr>
+                <td>Billing Agreement: </td>
+                <td>
+                    <input type='text' name='billingAgreementId' id='billingAgreementId' value='<%= billingAgreementId %>' />
+                </td>
+            </tr>
+            <tr>
+                <td>Valor: </td>
+                <td>
+                    <input type='text' name='amount' id='amount' value='<%= amount %>'/>
+                </td>
+            </tr>
+            <tr>
+                <td>Parcelas: </td>
+                <td>
+                    <% for(i = 0; i < financingOptions.financing_options.length; i++){ %>
+                        <select name='selectedTerm'id='selectedTerm' onchange='alert(JSON.stringigy(this.value));'>
+                            <% for(j = 0; j < financingOptions.financing_options[i].qualifying_financing_options.length; j++){ %>
+                                <% let option = financingOptions.financing_options[i].qualifying_financing_options[j] %>
+                                <option value='<%= JSON.stringify(option) %>'>
+                                    <%= option.credit_financing.term %> parcela(s) de <%= option.monthly_payment.value %> <%= option.monthly_payment.currency_code %>
+                                </option>
+            
+                            <% } %>
+                        </select>
+                    <% } %>
+                </td>
+            </tr>
+            <tr>
+                <td colspan=2>
+                    <input type='submit' value='VAMO PAGÁ?' />
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</div>

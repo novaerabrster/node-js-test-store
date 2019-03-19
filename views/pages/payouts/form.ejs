@@ -1,0 +1,46 @@
+<div id='container' >
+    <form action='/paypal/po/executepauouts' method='POST'>
+        <table>
+            <tr>
+                <td>Sender Batch ID: </td>
+                <td><input type='text' name='senderBatchId' value='<%= Math.floor(Math.random() * 1000000) + 1; %>' /></td>
+            </tr>
+            <tr>
+                <td>Email Subject: </td>
+                <td><input type='text' name='emailSubject' value='We have a Payment for you!' /></td>
+            </tr>
+            <tr>
+                <td colspan=2 >Item: </td>
+            </tr>
+            <tr>
+                <td>Recipient Type: </td>
+                <td><input type='text' name='recipientType' value='EMAIL' /></td>
+            </tr>
+            <tr>
+                <td>Amount: </td>
+                <td><input type='text' name='value' value='6.66' /></td>
+            </tr>
+            <tr>
+                <td>Currency: </td>
+                <td><input type='text' name='currency' value='BRL' /></td>
+            </tr>
+            <tr>
+                <td>Note: </td>
+                <td><input type='text' name='note' value='We love you!' /></td>
+            </tr>
+            <tr>
+                <td>Sender Item ID: </td>
+                <td><input type='text' name='senderItemId' value='<%= Math.floor(Math.random() * 1000000) + 1; %>' /></td>
+            </tr>
+            <tr>
+                <td>Receiver: </td>
+                <td><input type='text' name='receiver' value='gpeluzzo@paypal.com' /></td>
+            </tr>
+            <tr>
+                <td colspan=2>
+                    <input type='submit' value='EXECUTE PAYOUTS'/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

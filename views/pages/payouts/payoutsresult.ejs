@@ -1,0 +1,21 @@
+<div id='content'>
+    <pre><%= JSON.stringify(response, null, 2); %></pre>
+    <br /><br />
+    <form>
+        <input type='text' id='payoutBatchId' />
+        <input type='button' onclick='getBatchDetails()' value='SEARCH' />
+    </form>
+    
+    <div id='result'></div>
+    
+    <script>
+        function getBatchDetails(){
+            $.post('/paypal/po/getbatchpayouts', {
+                batchId: $('#payoutBatchId').val()
+            })
+            .done((html) => {
+                $('#result').html(html);
+            });
+        }
+    </script>
+</div>

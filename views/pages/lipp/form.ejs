@@ -1,0 +1,22 @@
+<div id='container' style='display:block'>
+    
+    <span id='lippButton'></span>
+    <script src='https://www.paypalobjects.com/js/external/api.js'></script>
+    <script>
+        paypal.use( ['login'], function (login) {
+          login.render ({
+            "appid":"AS-ajsWDGIZEtprpF-6z7jhkrdRdnvTqO6fwu-9RNVeoIJrfwpw6sNNXwaju3_vDlET2NTC7VT9RfuiR",
+            "authend":"sandbox",
+            "scopes":"openid profile email",
+            "containerid":"lippButton",
+            "locale":"pt-br",
+            "returnurl":"https://node-js-test-store-gpeluzzo.c9users.io/lipp/login"
+          });
+        });
+    </script>
+    
+</div>
+<div id='result' style='display:none'/>
+
+        
+
