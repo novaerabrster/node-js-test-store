@@ -1,4 +1,4 @@
-<div id='container'>
+<div id='container' style='display:block'>
 		<form action="/paypal/ec/createpayment" method="POST" id="ec_form">
 			<table>
 				<tr>
@@ -37,55 +37,127 @@
 					<td><input type="text" name="cancelUrl" id="cancelUrl" readonly="readonly" value="http://localhost/failReturn.html"></td>
 				</tr>
 				<tr>
+					<td>INTENT:</td>
+					<td>
+						<select name='intent'>
+							<option value='sale'>Sale</option>
+							<option value='authorize'>Authorize</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
 					<td colspan="2">
 						<input type="submit" id="executeMethod" value="VAI!!!">
 					</td>
 				</tr>
 
 				<tr>
+					<td>COMPRE AGORA:</td>
+					<td>
+						<div id='paypal-button1' />
+					</td>
+				</tr>
+				<tr>
 					<td colspan='2'>
-						<div id='paypal-button' />
+						&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td>CRIE SUA CONTA</td>
+					<td>
+						<div id='paypal-button2' />
 					</td>
 				</tr>
 			</table>
 		</form>
-</div>
-<script>
+		<script>
 
-    paypal.Button.render({
-        env: 'sandbox',
-        payment: () => {
-        	return paypal
-				.request
-				.post('/paypal/ec/createpayment', {data: $("#ec_form").serialize()})
-				.then((res) => {
-					return res.id;
-				});
-	    }, 
-        onAuthorize: (data, actions) => {
-        	console.log(data);
-        	return paypal
-        			.request
-        			.post('/paypal/ec/detailtransaction', data)
-        			.then((res) => {
-        				console.log(res);
-        			});
-        	return 
-        },
-        onCancel: () => {
-        	
-        },
-        onError: (data, actions) => {
-        	
-        },
-        style: {
-            size: 'large',
-            color: 'gold',
-            shape: 'pill'
-        },
-        commit: true
-    }, '#paypal-button');
-    
-</script>
+		    paypal.Button.render({
+		        env: 'sandbox',
+		        payment: () => {
+		        	
+		        	return "https://www.sandbox.paypal.com/BR/merchantsignup/partner/onboardingentry?token=YzJlOWFkOGQtZGQ1My00ZmEwLTk4MTQtMDIyYmFiMmJjYzdiREtFbG9wS1JyU01NN1BmRGJyTGcxQlFxdXFLY1ZYdHk2bjBpYWp1TVpsVT0=&context_token=1775333585573263360";
+		        	
+		    //     	return paypal
+						// .request
+						// .post('/paypal/ec/createpayment', {data: $("#ec_form").serialize(), page:'Login'})
+						// .then((res) => {
+						// 	return res.id;
+						// });
+			    }, 
+		        onAuthorize: (data, actions) => {
+		        	/*console.log(data);
+		        	actions.redirect();*/
+		        	return paypal
+		        			.request
+		        			.post('/paypal/ec/detailPayment', data)
+		        			.then((res) => {
+		        				console.log(res);
+		        				$('#result').html(res);
+		        				$('#container').hide();
+		        				$('#result').show();
+		        			});
+		        },
+		        onCancel: () => {
+		        	
+		        },
+		        onError: (data, actions) => {
+		        	
+		        },
+		        locale: 'pt_BR',
+		        style: {
+		            size: 'medium',
+		            color: 'gold',
+		            shape: 'pill',
+		            label: 'buynow',
+		            fundingicons:false,
+		        },
+		        commit: true
+		    }, '#paypal-button1');
+		    
+		    paypal.Button.render({
+		        env: 'sandbox',
+		        payment: () => {
+		        	return paypal
+						.request
+						.post('/paypal/ec/createpayment', {data: $("#ec_form").serialize(), page:'Billing'})
+						.then((res) => {
+							return res.id;
+						});
+			    }, 
+		        onAuthorize: (data, actions) => {
+		        	/*console.log(data);
+		        	actions.redirect();*/
+		        	return paypal
+		        			.request
+		        			.post('/paypal/ec/detailPayment', data)
+		        			.then((res) => {
+		        				console.log(res);
+		        				$('#result').html(res);
+		        				$('#container').hide();
+		        				$('#result').show();
+		        			});
+		        },
+		        onCancel: () => {
+		        	
+		        },
+		        onError: (data, actions) => {
+		        	
+		        },
+		        locale: 'pt_BR',
+		        style: {
+		            size: 'large',
+		            color: 'gold',
+		            shape: 'pill',
+		            label: 'installment',
+		            installmentperiod: 12
+		        },
+		        commit: true
+		    }, '#paypal-button2');
+		    
+		</script>
+</div>
+<div id='result' style='display:none'/>
+
         
 

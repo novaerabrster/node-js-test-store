@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/createpayment', (req, res) => {
-    res.render('layout', {
-        title: 'NodeJS Test Store',
-        content: 'sample'
-    }); 
-});
+var PayPalPlusController = require('../controllers/PayPalPlusController.js');
+
+router.get('/', PayPalPlusController.init);
+router.post('/executePayment', PayPalPlusController.executePayment)
+router.post('/disputecreated', PayPalPlusController.disputeCreated)
 
 module.exports = router;

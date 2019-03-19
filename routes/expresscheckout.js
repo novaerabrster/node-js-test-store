@@ -5,6 +5,8 @@ var ExpressCheckoutController = require('../controllers/ExpressCheckoutControlle
 
 router.get('/', ExpressCheckoutController.init);
 router.post('/createpayment', ExpressCheckoutController.createPayment);
-router.post('/detailtransaction', ExpressCheckoutController.detailTransaction )
+router.post('/detailPayment', ExpressCheckoutController.detailPayment );
+router.post('/executepayment', ExpressCheckoutController.executePayment);
+router.post('/capturePayment', ExpressCheckoutController.capturePayment);
 
 module.exports = router;

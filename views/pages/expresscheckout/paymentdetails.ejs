@@ -1,12 +1,12 @@
-<div id='container'>
-    
+
+<form id='paymentDetailsForm' method='POST' action='/paypal/ec/executepayment'>
     <table>
         <tr>
             <td>
                 PAYMENT ID: 
             </td>
             <td>
-                <span name='id'><%= details.id %></span> 
+                <input type='text'name='id' value='<%= details.id %>'/> 
             </td>
         </tr>
         <tr>
@@ -19,7 +19,7 @@
                 FIRST NAME: 
             </td>
             <td>
-                <span name='first_name'><%= details.payer_info.first_name %></span> 
+                <input type='text'name='first_name' value='<%= details.payer.payer_info.first_name %>'/> 
             </td>
         </tr>
         <tr>
@@ -27,7 +27,7 @@
                 LAST NAME: 
             </td>
             <td>
-                <span name='last_name'><%= details.payer_info.last_name %> </span> 
+                <input type='text'name='last_name' value='<%= details.payer.payer_info.last_name %>'/> 
             </td>
         </tr>
         <tr>
@@ -35,7 +35,7 @@
                 PAYER ID: 
             </td>
             <td>
-                <span name='payer_id'><%= details.payer_info.payer_id %> </span> 
+                <input type='text'name='payer_id' value='<%= details.payer.payer_info.payer_id %>'/> 
             </td>
         </tr>
         <tr>
@@ -48,7 +48,7 @@
                 RECIPIENT NAME: 
             </td>
             <td>
-                <span name='shipping_address.recipient_name'><%= details.shipping_address.recipient_name %> </span> 
+                <input type='text'name='shipping_address.recipient_name' value='<%= details.transactions[0].item_list.shipping_address.recipient_name %>' /> 
             </td>
         </tr>
         <tr>
@@ -56,7 +56,7 @@
                 ADDRESS LINE 1: 
             </td>
             <td>
-                <span name='shipping_address.line1'><%= details.shipping_address.line1 %> </span> 
+                <input type='text'name='shipping_address.line1' value='<%= details.transactions[0].item_list.shipping_address.line1 %>'/> 
             </td>
         </tr>
         <tr>
@@ -64,7 +64,7 @@
                 ADDRESS LINE 2: 
             </td>
             <td>
-                <span name='shipping_address.line2'><%= details.shipping_address.line2 %> </span> 
+                <input type='text'name='shipping_address.line2' value='<%= details.transactions[0].item_list.shipping_address.line2 %>'/> 
             </td>
         </tr>
         <tr>
@@ -72,7 +72,7 @@
                 CITY: 
             </td>
             <td>
-                <span name='shipping_address.city'><%= details.shipping_address.city %> </span> 
+                <input type='text'name='shipping_address.city' value='<%= details.transactions[0].item_list.shipping_address.city %>'/> 
             </td>
         </tr>
         <tr>
@@ -80,7 +80,7 @@
                 STATE: 
             </td>
             <td>
-                <span name='shipping_address.state'><%= details.shipping_address.state %></span>  
+                <input type='text'name='shipping_address.state' value='<%= details.transactions[0].item_list.shipping_address.state %>'/>  
             </td>
         </tr>
         <tr>
@@ -88,7 +88,7 @@
                 POSTAL CODE: 
             </td>
             <td>
-                <span name='shipping_address.postal_code'><%= details.shipping_address.postal_code %></span>  
+                <input type='text'name='shipping_address.postal_code' value='<%= details.transactions[0].item_list.shipping_address.postal_code %>'/>  
             </td>
         </tr>
         <tr>
@@ -96,9 +96,19 @@
                 COUNTRY CODE: 
             </td>
             <td>
-                <span name='shipping_address.country_code'><%= details.shipping_address.country_code %> </span> 
+                <input type='text'name='shipping_address.country_code' value='<%= details.transactions[0].item_list.shipping_address.country_code %>'/> 
+            </td>
+        </tr>
+        <tr>
+            <td colspan=2>
+                <input type='textarea' name='dataString' value='<%= JSON.stringify(details) %>' />
+            </td>
+        </tr>
+        <tr>
+            <td colspan=2>
+                <input type='submit' id='submitDetails' value='PAY DETAIL' />
             </td>
         </tr>
     </table>
     
-</div>
+</form>
